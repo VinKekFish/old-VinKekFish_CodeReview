@@ -205,12 +205,7 @@ namespace vinkekfish
                 {
                     prng.doRandomPermutationForUShorts(table1);
                     prng.doRandomPermutationForUShorts(table2);
-/*  // Если необходимо, раскомментировать отладочный код: здесь проверяется, что перестановки были корректны (что они перестановки, а не какие-то ошибки)
-#if DEBUG
-                    CheckPermutationTable(table1);
-                    CheckPermutationTable(table2);
-#endif
-*/
+
                     BytesBuilder.CopyTo(len2, len2, (byte*)Table1, (byte*)r); r += len1;
                     BytesBuilder.CopyTo(len2, len2, (byte*)Table2, (byte*)r); r += len1;
                     BytesBuilder.CopyTo(len2, len2, transpose200_3200, (byte*)r); r += len1;

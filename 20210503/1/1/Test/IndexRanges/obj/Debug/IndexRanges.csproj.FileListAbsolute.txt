@@ -3,3 +3,4 @@ C:\dev\VinKekFish_CodeReview\20210503\1\1\Test\IndexRanges\bin\Debug\IndexRanges
 C:\dev\VinKekFish_CodeReview\20210503\1\1\Test\IndexRanges\bin\Debug\IndexRanges.pdb
 C:\dev\VinKekFish_CodeReview\20210503\1\1\Test\IndexRanges\obj\Debug\IndexRanges.dll
 C:\dev\VinKekFish_CodeReview\20210503\1\1\Test\IndexRanges\obj\Debug\IndexRanges.pdb
+C:\dev\VinKekFish_CodeReview\20210503\1\1\Test\IndexRanges\obj\Debug\IndexRanges.csprojAssemblyReference.cache

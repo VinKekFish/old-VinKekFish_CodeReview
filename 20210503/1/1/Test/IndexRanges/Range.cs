@@ -26,12 +26,39 @@ namespace IndexRanges
                 _array = new byte[Length];
         }
 
+        public Range(byte[] array)
+        {
+            this._array = array;
+            this.Length = array.LongLength;
+        }
+
         /// <summary>Выделить условный участок памяти</summary>
         /// <param name="Length">Длина участка</param>
         /// <param name="realAllocation">Реально выделить этот участок внутри Range</param>
-        public static Range @new(int Length = 0, bool realAllocation = true)
+        public static Range @new(long Length = 0, bool realAllocation = true)
         {
             return new Range(Length: Length, realAllocation: realAllocation);
+        }
+
+        public Range Clone()
+        {
+            var r = new Range(Length: Length, false);
+            r.min = min;
+            r.max = max;
+            r.haveMax = haveMax;
+            r.haveMin = haveMin;
+
+            r.fileName  = fileName;
+            r.baseRange = baseRange;
+            r._array    = array;
+            r._ptr      = _ptr;
+
+            r.inited    = inited;
+            r.Readonly  = Readonly;
+
+            r.baseRangeOffset = baseRangeOffset;
+
+            return r;
         }
 
         /// <summary>Сделать производный Range от старого. Это нужно, когда к указателю сделали приращение</summary>
@@ -80,8 +107,8 @@ namespace IndexRanges
                 throw new Exception();
         }
 
-        protected byte[] _array = null;
-        public    byte * _ptr   = null;
+        public byte[] _array = null;
+        public byte * _ptr   = null;
 
         public byte[] array
         {
