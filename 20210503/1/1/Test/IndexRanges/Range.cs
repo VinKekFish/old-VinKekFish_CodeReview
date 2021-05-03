@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace IndexRanges
 {
-    public unsafe class Range
+    public unsafe class Range: IDisposable
     {
         public long min = 0;
         public long max = 0;
@@ -18,7 +18,7 @@ namespace IndexRanges
 
         public string fileName = null;
 
-        protected Range(long Length = 0, bool realAllocation = false)
+        protected Range(long Length = 0, bool realAllocation = true)
         {
             this.Length = Length;
 
@@ -29,7 +29,7 @@ namespace IndexRanges
         /// <summary>Выделить условный участок памяти</summary>
         /// <param name="Length">Длина участка</param>
         /// <param name="realAllocation">Реально выделить этот участок внутри Range</param>
-        public static Range @new(int Length = 0, bool realAllocation = false)
+        public static Range @new(int Length = 0, bool realAllocation = true)
         {
             return new Range(Length: Length, realAllocation: realAllocation);
         }
@@ -81,7 +81,7 @@ namespace IndexRanges
         }
 
         protected byte[] _array = null;
-        protected byte * _ptr   = null;
+        public    byte * _ptr   = null;
 
         public byte[] array
         {
@@ -169,6 +169,10 @@ namespace IndexRanges
             Access(maxIndex, write);
         }
 
+        public void Dispose()
+        {
+        }
+
         public static implicit operator byte *(Range r)
         {
             return null;
@@ -191,6 +195,11 @@ namespace IndexRanges
         public static bool operator < (Range a, Range b)
         {
             return a.ptr < b.ptr;
+        }
+
+        public static Range operator ++(Range a)
+        {
+            return a + 1;
         }
     }
 }

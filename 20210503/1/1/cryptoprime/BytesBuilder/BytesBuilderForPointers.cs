@@ -140,17 +140,17 @@ namespace cryptoprime
 
             public static implicit operator byte * (Record t)
             {
-                return t.array;
+                throw new NotImplementedException();
             }
 
             public static implicit operator ushort * (Record t)
             {
-                return (ushort *) t.array;
+                throw new NotImplementedException();
             }
 
             public static implicit operator ulong * (Record t)
             {
-                return (ulong *) t.array;
+                throw new NotImplementedException();
             }
 
             public static Record operator +(Record a, long len)

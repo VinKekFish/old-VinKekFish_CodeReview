@@ -11,3 +11,4 @@ C:\dev\VinKekFish_CodeReview\20210503\1\1\Test\Test1\bin\Debug\IndexRanges.pdb
 C:\dev\VinKekFish_CodeReview\20210503\1\1\Test\Test1\obj\Debug\Test1.csproj.CopyComplete
 C:\dev\VinKekFish_CodeReview\20210503\1\1\Test\Test1\obj\Debug\Test1.exe
 C:\dev\VinKekFish_CodeReview\20210503\1\1\Test\Test1\obj\Debug\Test1.pdb
+C:\dev\VinKekFish_CodeReview\20210503\1\1\Test\Test1\obj\Debug\Test1.csprojAssemblyReference.cache

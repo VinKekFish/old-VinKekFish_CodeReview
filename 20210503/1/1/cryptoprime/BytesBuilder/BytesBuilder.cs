@@ -14,7 +14,9 @@ namespace cryptoprime
     public partial class BytesBuilder
     {
         /// <summary>Добавленные блоки байтов</summary>
-        public List<byte[]> bytes = new List<byte[]>();
+        // Если кто-то перезапишет это, может быть потеря целостности
+        // Впрочем, если кто-то запишет сюда что-то напрямую, будет та же проблема
+        public List<Range> bytes = new List<Range>();
 
         /// <summary>Количество всех сохранённых байтов в этом объекте</summary>
         public long Count  => count;
@@ -23,8 +25,9 @@ namespace cryptoprime
         public long countOfBlocks => bytes.Count;
 
         /// <summary>Получает сохранённых блок с определённым индексом в списке сохранения</summary><param name="number">Индекс в списке</param><returns>Сохранённый блок (не копия, подлинник)</returns>
-        public byte[] getBlock(int number)
+        public Range getBlock(int number)
         {
+            // Здесь не может быть выхода за пределы массива в том смысле, что это вызовет исключение
             return bytes[number];
         }
 
@@ -460,21 +463,13 @@ namespace cryptoprime
         /// <param name="index">Индекс начального элемента для обнуления</param>
         /// <param name="count">Количество элементов для обнуления, -1 - обнулять до конца</param>
         /// <returns>Количество обнулённых байтов</returns>
-        unsafe public static long ToNull(byte[] t, ulong val = 0, long index = 0, long count = -1)
-        {
-            fixed (byte* tb = t)
-            {
-                return ToNull(t.LongLength, tb, val, index, count);
-            }
-        }
-
         unsafe public static long ToNull(Range t, ulong val = 0, long index = 0, long count = -1)
         {
             fixed (byte* tb = t.array)
             {
-                t.ptr = tb;
+                t._ptr = tb;
                 return ToNull(t.array.LongLength, t, val, index, count);
-                t.ptr = null;
+                t._ptr = null;
             }
         }
 
@@ -505,24 +500,34 @@ namespace cryptoprime
             if (tbc < t)
                 throw new ArgumentOutOfRangeException();
 
-            ulong* tbw = (ulong*)tbc;
+            // Без проверки идёт
+            ulong* tbw = (ulong*)tbc.ptr;
+            var tbw_range = tbc + 0;
 
-            ulong* tew = tbw + ((tec - tbc) >> 3);
+            ulong* tew = tbw + ((tec.ptr - tbc.ptr) >> 3);
+            var tew_range = tbw_range + (tec.ptr - tbc.ptr);
 
-            for (; tbw < tew; tbw++)
+            for (; tbw < tew; tbw++, tbw_range += 8)
+            {
                 *tbw = val;
+                tbw_range.Access(0, true);
+            }
 
-            byte toEnd = (byte)(((int)(tec - tbc)) & 0x7);
+            byte toEnd = (byte)(((int)(tec.ptr - tbc.ptr)) & 0x7);
 
             byte* tbcb = (byte*)tbw;
+            var tbcb_  = tbw_range;
             byte* tbce = tbcb + toEnd;
+            var tbce_  = tbw_range + toEnd;
 
             var bval = (byte) val;
-            for (; tbcb < tbce; tbcb++)
+            for (; tbcb < tbce; tbcb++, tbce_++)
+            {
                 *tbcb = bval;
+                tbcb_.Access(0, true);
+            }
 
-
-            return tec - tbc;
+            return tec.ptr - tbc.ptr;
         }
         /*
         public unsafe static void BytesToNull(byte[] bytes, long firstNotNull = long.MaxValue, long start = 0)

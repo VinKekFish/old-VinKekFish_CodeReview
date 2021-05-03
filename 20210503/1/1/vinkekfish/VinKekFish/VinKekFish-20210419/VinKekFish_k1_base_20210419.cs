@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 using static cryptoprime.BytesBuilderForPointers;
+using IndexRanges;
 
 namespace vinkekfish
 {
