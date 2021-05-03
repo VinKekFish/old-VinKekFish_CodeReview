@@ -1,0 +1,6 @@
+C:\dev\VinKekFish\cryptoprime\obj\Release\010_cryptoprime.csproj.CoreCompileInputs.cache
+C:\dev\VinKekFish\cryptoprime\bin\Release\cryptoprime.dll
+C:\dev\VinKekFish\cryptoprime\bin\Release\cryptoprime.pdb
+C:\dev\VinKekFish\cryptoprime\obj\Release\cryptoprime.dll
+C:\dev\VinKekFish\cryptoprime\obj\Release\cryptoprime.pdb
+C:\dev\VinKekFish\cryptoprime\obj\Release\010_cryptoprime.csprojAssemblyReference.cache

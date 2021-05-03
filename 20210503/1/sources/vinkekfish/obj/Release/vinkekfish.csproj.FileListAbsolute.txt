@@ -1,0 +1,9 @@
+C:\dev\VinKekFish\vinkekfish\bin\Release\vinkekfish.dll
+C:\dev\VinKekFish\vinkekfish\bin\Release\vinkekfish.pdb
+C:\dev\VinKekFish\vinkekfish\obj\Release\vinkekfish.csproj.CoreCompileInputs.cache
+C:\dev\VinKekFish\vinkekfish\obj\Release\vinkekfish.dll
+C:\dev\VinKekFish\vinkekfish\obj\Release\vinkekfish.pdb
+C:\dev\VinKekFish\vinkekfish\bin\Release\cryptoprime.dll
+C:\dev\VinKekFish\vinkekfish\bin\Release\cryptoprime.pdb
+C:\dev\VinKekFish\vinkekfish\obj\Release\vinkekfish.csprojAssemblyReference.cache
+C:\dev\VinKekFish\vinkekfish\obj\Release\vinkekfish.csproj.CopyComplete

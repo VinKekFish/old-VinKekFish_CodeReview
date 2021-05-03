@@ -1,0 +1,6 @@
+C:\dev\VinKekFish\vinkekfish\bin\Debug\vinkekfish.dll
+C:\dev\VinKekFish\vinkekfish\bin\Debug\vinkekfish.pdb
+C:\dev\VinKekFish\vinkekfish\obj\Debug\vinkekfish.csproj.CoreCompileInputs.cache
+C:\dev\VinKekFish\vinkekfish\obj\Debug\vinkekfish.dll
+C:\dev\VinKekFish\vinkekfish\obj\Debug\vinkekfish.pdb
+C:\dev\VinKekFish\vinkekfish\obj\Debug\vinkekfish.csprojAssemblyReference.cache

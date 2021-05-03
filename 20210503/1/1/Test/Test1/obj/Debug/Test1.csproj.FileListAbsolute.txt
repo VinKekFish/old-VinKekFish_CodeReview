@@ -1,0 +1,13 @@
+C:\dev\VinKekFish_CodeReview\20210503\1\1\Test\Test1\obj\Debug\Test1.csproj.CoreCompileInputs.cache
+C:\dev\VinKekFish_CodeReview\20210503\1\1\Test\Test1\bin\Debug\Test1.exe.config
+C:\dev\VinKekFish_CodeReview\20210503\1\1\Test\Test1\bin\Debug\Test1.exe
+C:\dev\VinKekFish_CodeReview\20210503\1\1\Test\Test1\bin\Debug\Test1.pdb
+C:\dev\VinKekFish_CodeReview\20210503\1\1\Test\Test1\bin\Debug\cryptoprime.dll
+C:\dev\VinKekFish_CodeReview\20210503\1\1\Test\Test1\bin\Debug\IndexRanges.dll
+C:\dev\VinKekFish_CodeReview\20210503\1\1\Test\Test1\bin\Debug\vinkekfish.dll
+C:\dev\VinKekFish_CodeReview\20210503\1\1\Test\Test1\bin\Debug\cryptoprime.pdb
+C:\dev\VinKekFish_CodeReview\20210503\1\1\Test\Test1\bin\Debug\vinkekfish.pdb
+C:\dev\VinKekFish_CodeReview\20210503\1\1\Test\Test1\bin\Debug\IndexRanges.pdb
+C:\dev\VinKekFish_CodeReview\20210503\1\1\Test\Test1\obj\Debug\Test1.csproj.CopyComplete
+C:\dev\VinKekFish_CodeReview\20210503\1\1\Test\Test1\obj\Debug\Test1.exe
+C:\dev\VinKekFish_CodeReview\20210503\1\1\Test\Test1\obj\Debug\Test1.pdb

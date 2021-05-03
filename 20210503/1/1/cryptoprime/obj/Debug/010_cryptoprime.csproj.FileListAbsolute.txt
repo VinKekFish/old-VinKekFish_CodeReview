@@ -1,0 +1,14 @@
+C:\dev\VinKekFish\cryptoprime\bin\Debug\cryptoprime.dll
+C:\dev\VinKekFish\cryptoprime\bin\Debug\cryptoprime.pdb
+C:\dev\VinKekFish\cryptoprime\obj\Debug\010_cryptoprime.csproj.CoreCompileInputs.cache
+C:\dev\VinKekFish\cryptoprime\obj\Debug\cryptoprime.dll
+C:\dev\VinKekFish\cryptoprime\obj\Debug\cryptoprime.pdb
+C:\dev\VinKekFish_CodeReview\20210503\1\1\cryptoprime\obj\Debug\010_cryptoprime.csproj.CoreCompileInputs.cache
+C:\dev\VinKekFish_CodeReview\20210503\1\1\cryptoprime\obj\Debug\cryptoprime.dll
+C:\dev\VinKekFish_CodeReview\20210503\1\1\cryptoprime\obj\Debug\cryptoprime.pdb
+C:\dev\VinKekFish_CodeReview\20210503\1\1\cryptoprime\bin\Debug\cryptoprime.dll
+C:\dev\VinKekFish_CodeReview\20210503\1\1\cryptoprime\bin\Debug\cryptoprime.pdb
+C:\dev\VinKekFish_CodeReview\20210503\1\1\cryptoprime\bin\Debug\IndexRanges.dll
+C:\dev\VinKekFish_CodeReview\20210503\1\1\cryptoprime\bin\Debug\IndexRanges.pdb
+C:\dev\VinKekFish_CodeReview\20210503\1\1\cryptoprime\obj\Debug\010_cryptoprime.csprojAssemblyReference.cache
+C:\dev\VinKekFish_CodeReview\20210503\1\1\cryptoprime\obj\Debug\010_cryptoprime.csproj.CopyComplete
