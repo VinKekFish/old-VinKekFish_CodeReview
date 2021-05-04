@@ -61,11 +61,5 @@
   <ItemGroup>
     <None Include="VinKekFish\descr.md" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Test\IndexRanges\IndexRanges.csproj">
-      <Project>{d59a9c39-616c-40ed-a273-485d3cf667f7}</Project>
-      <Name>IndexRanges</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

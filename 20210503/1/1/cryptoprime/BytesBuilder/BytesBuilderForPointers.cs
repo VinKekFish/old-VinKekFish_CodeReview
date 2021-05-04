@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 
-using IndexRanges;
-
 namespace cryptoprime
 {
     /// <summary>
@@ -16,7 +14,7 @@ namespace cryptoprime
     {
         public unsafe class Record: IDisposable, ICloneable
         {
-            public          Range    array = null;
+            public          byte *   array = null;
             public          long     len   = 0;
 
             public GCHandle handle = default;
@@ -140,17 +138,17 @@ namespace cryptoprime
 
             public static implicit operator byte * (Record t)
             {
-                throw new NotImplementedException();
+                return t.array;
             }
 
             public static implicit operator ushort * (Record t)
             {
-                throw new NotImplementedException();
+                return (ushort *) t.array;
             }
 
             public static implicit operator ulong * (Record t)
             {
-                throw new NotImplementedException();
+                return (ulong *) t.array;
             }
 
             public static Record operator +(Record a, long len)

@@ -7,7 +7,3 @@ C:\dev\VinKekFish\vinkekfish\obj\Debug\001vinkekfish.csproj.CoreCompileInputs.ca
 C:\dev\VinKekFish\vinkekfish\obj\Debug\001vinkekfish.csproj.CopyComplete
 C:\dev\VinKekFish\vinkekfish\obj\Debug\vinkekfish.dll
 C:\dev\VinKekFish\vinkekfish\obj\Debug\vinkekfish.pdb
-C:\dev\VinKekFish_CodeReview\20210503\1\1\vinkekfish\obj\Debug\001vinkekfish.csprojAssemblyReference.cache
-C:\dev\VinKekFish_CodeReview\20210503\1\1\vinkekfish\obj\Debug\001vinkekfish.csproj.CoreCompileInputs.cache
-C:\dev\VinKekFish_CodeReview\20210503\1\1\vinkekfish\obj\Debug\vinkekfish.dll
-C:\dev\VinKekFish_CodeReview\20210503\1\1\vinkekfish\obj\Debug\vinkekfish.pdb

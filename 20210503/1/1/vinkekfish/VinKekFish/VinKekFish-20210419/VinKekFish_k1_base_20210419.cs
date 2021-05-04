@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 using static cryptoprime.BytesBuilderForPointers;
-using IndexRanges;
 
 namespace vinkekfish
 {
@@ -40,7 +39,7 @@ namespace vinkekfish
         /// <param name="additionalKeyForTables">Дополнительный ключ: это ключ для таблиц перестановок</param>
         /// <param name="OpenInitVectorForTables">Дополнительный вектор инициализации для перестановок (используется совместно с ключом)</param>
         /// <param name="PreRoundsForTranspose">Количество раундов со стандартными таблицами transpose< (не менее 1)/param>
-        public virtual void Init1(int RoundsForTables, Range additionalKeyForTables, long additionalKeyForTables_length, byte[] OpenInitVectorForTables = null, int PreRoundsForTranspose = 8)
+        public virtual void Init1(int RoundsForTables, byte * additionalKeyForTables, long additionalKeyForTables_length, byte[] OpenInitVectorForTables = null, int PreRoundsForTranspose = 8)
         {
             Clear();
             GC.Collect();
@@ -205,7 +204,12 @@ namespace vinkekfish
                 {
                     prng.doRandomPermutationForUShorts(table1);
                     prng.doRandomPermutationForUShorts(table2);
-
+/*  // Если необходимо, раскомментировать отладочный код: здесь проверяется, что перестановки были корректны (что они перестановки, а не какие-то ошибки)
+#if DEBUG
+                    CheckPermutationTable(table1);
+                    CheckPermutationTable(table2);
+#endif
+*/
                     BytesBuilder.CopyTo(len2, len2, (byte*)Table1, (byte*)r); r += len1;
                     BytesBuilder.CopyTo(len2, len2, (byte*)Table2, (byte*)r); r += len1;
                     BytesBuilder.CopyTo(len2, len2, transpose200_3200, (byte*)r); r += len1;

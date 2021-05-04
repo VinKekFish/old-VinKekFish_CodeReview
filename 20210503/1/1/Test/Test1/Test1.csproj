@@ -22,8 +22,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -50,20 +48,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\cryptoprime\010_cryptoprime.csproj">
-      <Project>{e9a150ce-af97-481b-9aca-c6eaaf3de4e4}</Project>
-      <Name>010_cryptoprime</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\vinkekfish\001vinkekfish.csproj">
-      <Project>{593efa79-fa33-4934-a740-6a4c2ecf24d9}</Project>
-      <Name>001vinkekfish</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\IndexRanges\IndexRanges.csproj">
-      <Project>{d59a9c39-616c-40ed-a273-485d3cf667f7}</Project>
-      <Name>IndexRanges</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

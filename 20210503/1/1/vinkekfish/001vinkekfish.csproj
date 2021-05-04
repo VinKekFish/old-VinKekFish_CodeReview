@@ -63,10 +63,6 @@
       <Project>{e9a150ce-af97-481b-9aca-c6eaaf3de4e4}</Project>
       <Name>010_cryptoprime</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Test\IndexRanges\IndexRanges.csproj">
-      <Project>{d59a9c39-616c-40ed-a273-485d3cf667f7}</Project>
-      <Name>IndexRanges</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

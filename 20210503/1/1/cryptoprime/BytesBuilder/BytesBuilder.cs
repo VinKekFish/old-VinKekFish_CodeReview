@@ -1,6 +1,4 @@
-﻿using IndexRanges;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -14,9 +12,7 @@ namespace cryptoprime
     public partial class BytesBuilder
     {
         /// <summary>Добавленные блоки байтов</summary>
-        // Если кто-то перезапишет это, может быть потеря целостности
-        // Впрочем, если кто-то запишет сюда что-то напрямую, будет та же проблема
-        public List<Range> bytes = new List<Range>();
+        public List<byte[]> bytes = new List<byte[]>();
 
         /// <summary>Количество всех сохранённых байтов в этом объекте</summary>
         public long Count  => count;
@@ -25,9 +21,8 @@ namespace cryptoprime
         public long countOfBlocks => bytes.Count;
 
         /// <summary>Получает сохранённых блок с определённым индексом в списке сохранения</summary><param name="number">Индекс в списке</param><returns>Сохранённый блок (не копия, подлинник)</returns>
-        public Range getBlock(int number)
+        public byte[] getBlock(int number)
         {
-            // Здесь не может быть выхода за пределы массива в том смысле, что это вызовет исключение
             return bytes[number];
         }
 
@@ -38,24 +33,12 @@ namespace cryptoprime
         /// <param name="index">Куда добавляется блок. По-умолчанию, в конец (index = -1)</param>
         /// <param name="MakeCopy">MakeCopy = true говорит о том, что данные блока будут скопированы (создан новый блок и он будет добавлен). По-умолчанию false - блок будет добавлен без копирования. Это значит, что при изменении исходного блока, изменится и выход, даваемый объектом. Если исходный блок будет обнулён, то будет обнулены и выходные байты из этого объекта, соответствующие этому блоку</param>
         // При добавлении блока важно проверить, верно выставлен параметр MakeCopy и если MakeCopy = false, то блок не должен изменяться
-        public void add(Range bytesToAdded, int index = -1, bool MakeCopy = false)
+        public void add(byte[] bytesToAdded, int index = -1, bool MakeCopy = false)
         {
             if (MakeCopy)
             {
-                // var b = new byte[bytesToAdded.LongLength];
-                var b = Range.@new(bytesToAdded.Length);
-
+                var b = new byte[bytesToAdded.LongLength];
                 BytesBuilder.CopyTo(bytesToAdded, b);
-                bytesToAdded = b;
-            }
-            // Для отладки
-            else
-            {
-                var b = bytesToAdded.Clone();
-                // Если !MakeCopy, то этот блок мы больше не должны трогать во-вне, потому что его изменения отразяться и здесь
-                // И наоборот, обнуление здесь может вызвать ошибку там
-                bytesToAdded.inited = false;
-
                 bytesToAdded = b;
             }
 
@@ -64,11 +47,11 @@ namespace cryptoprime
             else
                 bytes.Insert((int) index, bytesToAdded);
 
-            count += bytesToAdded.Length;
+            count += bytesToAdded.LongLength;
         }
 
         /// <summary>Копирует данные блока и добавляет его в объект</summary><param name="bytesToAdded">Добавляемый блок</param><param name="index">Индекс для добавления.  index = -1 - добавление в конец</param>
-        public void addCopy(Range bytesToAdded, int index = -1)
+        public void addCopy(byte[] bytesToAdded, int index = -1)
         {
             add(bytesToAdded, index, true);
         }
@@ -76,7 +59,7 @@ namespace cryptoprime
         /// <summary>Добавляет в объект один байт</summary><param name="number">Добавляемое значение</param><param name="index">Индекс добавляемого блока. -1 - в конец</param>
         public void addByte(byte number, int index = -1)
         {
-            var n = Range.@new(1);
+            var n = new byte[1];
             n[0] = number;
             add(n, index);
         }
@@ -84,7 +67,7 @@ namespace cryptoprime
         /// <summary>Добавляет в объект двухбайтовое беззнаковое целое. Младший байт по младшему адресу</summary>
         public void addUshort(ushort number, int index = -1)
         {
-            var n = Range.@new(2);
+            var n = new byte[2];
             n[1] = (byte) (number >> 8);
             n[0] = (byte) (number     );
             add(n, index);
@@ -93,7 +76,7 @@ namespace cryptoprime
         /// <summary>Добавляет в объект 4-хбайтовое беззнаковое целое. Младший байт по младшему адресу</summary>
         public void addInt(int number, int index = -1)
         {
-            var n = Range.@new(4);
+            var n = new byte[4];
             n[3] = (byte) (number >> 24);
             n[2] = (byte) (number >> 16);
             n[1] = (byte) (number >> 8);
@@ -105,7 +88,7 @@ namespace cryptoprime
         /// <summary>Добавляет в объект 8-хбайтовое беззнаковое целое. Младший байт по младшему адресу</summary>
         public void addULong(ulong number, int index = -1)
         {
-            var n = Range.@new(8);
+            var n = new byte[8];
             n[7] = (byte) (number >> 56);
             n[6] = (byte) (number >> 48);
             n[5] = (byte) (number >> 40);
@@ -124,13 +107,13 @@ namespace cryptoprime
             byte[] target = null;
             BytesBuilder.VariableULongToBytes(number, ref target);
 
-            add(new Range(target), index);
+            add(target, index);
         }
 
         /// <summary>Добавляет в объект строку UTF-8</summary>
         public void add(string utf8String, int index = -1)
         {
-            add(new Range(UTF8Encoding.UTF8.GetBytes(utf8String)), index);
+            add(UTF8Encoding.UTF8.GetBytes(utf8String), index);
         }
 
         /// <summary>Обнуляет объект</summary>
@@ -139,19 +122,58 @@ namespace cryptoprime
         {
             if (!fast)
             {
-                foreach (Range e in bytes)
+                foreach (byte[] e in bytes)
                     BytesBuilder.ToNull(e);
             }
 
             count = 0;
             bytes.Clear();
         }
+        /*
+        /// <summary>Удаляет последний блок из объекта, блок очищается нулями</summary>
+        /// <returns>Возвращает длину последнего блока</returns>
+        public long RemoveLastBlock()
+        {
+            if (bytes.Count <= 0)
+                return 0;
+
+            return RemoveBlockAt(bytes.Count - 1);
+        }
+
+        /// <summary>Удаляет несколько блоков с позиции position до позиции endPosition включительно</summary>
+        /// <param name="position">Индекс первого удаляемого блока</param><param name="endPosition">Индекс последнего удаляемого блока</param>
+        /// <returns>Количество удалённых байтов</returns>
+        public long RemoveBlocks(int position, int endPosition)
+        {
+            if (position < 0)
+                throw new ArgumentException("position must be >= 0");
+
+            if (position >= bytes.Count)
+                throw new ArgumentException("position must be in range");
+
+            if (position > endPosition)
+                throw new ArgumentException("position must be position <= endPosition");
+
+            if (endPosition >= bytes.Count)
+                throw new ArgumentException("endPosition must be endPosition < bytes.Count");
+
+            long removedLength = 0;
+
+            for (int i = position; i <= endPosition; i++)
+            {
+                removedLength += RemoveBlockAt(position);
+            }
+
+            count -= removedLength;
+            return removedLength;
+        }
+        */
 
         /// <summary>Создаёт массив байтов, включающий в себя все сохранённые массивы</summary>
         /// <param name="resultCount">Размер массива-результата (если нужны все байты resultCount = -1)</param>
         /// <param name="resultA">Массив, в который будет записан результат. Если resultA = null, то массив создаётся</param>
         /// <returns></returns>
-        public Range getBytes(long resultCount = -1, Range resultA = null)
+        public byte[] getBytes(long resultCount = -1, byte[] resultA = null)
         {
             if (resultCount == -1)
                 resultCount = count;
@@ -164,16 +186,16 @@ namespace cryptoprime
             if (resultA != null && resultA.Length < resultCount)
                 throw new System.ArgumentOutOfRangeException("resultA", "resultA is too small");
 
-            Range result = resultA ?? Range.@new(resultCount);
+            byte[] result = resultA ?? new byte[resultCount];
 
             long cursor = 0;
             for (int i = 0; i < bytes.Count; i++)
             {
-                if (cursor >= result.Length)
+                if (cursor >= result.LongLength)
                     break;
 
                 CopyTo(bytes[i], result, cursor);
-                cursor += bytes[i].Length;
+                cursor += bytes[i].LongLength;
             }
 
             return result;
@@ -191,7 +213,7 @@ namespace cryptoprime
 
             var tmp = bytes[position];
 
-            long removedLength = tmp.Length;
+            long removedLength = tmp.LongLength;
             bytes.RemoveAt(position);
 
             if (doClear)
@@ -330,18 +352,15 @@ namespace cryptoprime
         /// <param name="targetIndex">Начальный индекс копирования в приёмник</param>
         /// <param name="count">Максимальное количество байт для копирования (-1 - все доступные)</param>
         /// <param name="index">Начальный индекс копирования из источника</param>
-        public unsafe static long CopyTo(Range source, Range target, long targetIndex = 0, long count = -1, long index = 0)
+        public unsafe static long CopyTo(byte[] source, byte[] target, long targetIndex = 0, long count = -1, long index = 0)
         {
-            long sl = source.Length;
+            long sl = source.LongLength;
             if (count < 0)
                 count = sl;
 
-            source.Access(index,       targetIndex + count, write: false);
-            target.Access(targetIndex, index + count,       write: true);
-
-            fixed (byte * s = source.array, t = target.array)
+            fixed (byte * s = source, t = target)
             {
-                return CopyTo(sl, target.Length, s, t, targetIndex, count, index);
+                return CopyTo(sl, target.LongLength, s, t, targetIndex, count, index);
             }
         }
 
@@ -439,13 +458,11 @@ namespace cryptoprime
         /// <param name="index">Индекс начального элемента для обнуления</param>
         /// <param name="count">Количество элементов для обнуления, -1 - обнулять до конца</param>
         /// <returns>Количество обнулённых байтов</returns>
-        unsafe public static long ToNull(Range t, ulong val = 0, long index = 0, long count = -1)
+        unsafe public static long ToNull(byte[] t, ulong val = 0, long index = 0, long count = -1)
         {
-            fixed (byte* tb = t.array)
+            fixed (byte* tb = t)
             {
-                t._ptr = tb;
-                return ToNull(t.array.LongLength, t, val, index, count);
-                t._ptr = null;
+                return ToNull(t.LongLength, tb, val, index, count);
             }
         }
 
@@ -457,55 +474,6 @@ namespace cryptoprime
         /// <param name="index">Индекс начального элемента для обнуления</param>
         /// <param name="count">Количество элементов для обнуления, -1 - обнулять до конца</param>
         /// <returns>Количество обнулённых байтов</returns>
-        unsafe public static long ToNull(long targetLength, Range t, ulong val = 0, long index = 0, long count = -1)
-        {
-            if (count < 0)
-                count = targetLength - index;
-
-            Range te = t + targetLength;
-
-            Range tec = t + index + count;
-            Range tbc = t + index;
-
-            if (tec > te)
-            {
-                throw new ArgumentOutOfRangeException("tec > te");
-                // tec = te;
-            }
-
-            if (tbc < t)
-                throw new ArgumentOutOfRangeException();
-
-            // Без проверки идёт
-            ulong* tbw = (ulong*)tbc.ptr;
-            var tbw_range = tbc + 0;
-
-            ulong* tew = tbw + ((tec.ptr - tbc.ptr) >> 3);
-            var tew_range = tbw_range + (tec.ptr - tbc.ptr);
-
-            for (; tbw < tew; tbw++, tbw_range += 8)
-            {
-                *tbw = val;
-                tbw_range.Access(0, true);
-            }
-
-            byte toEnd = (byte)(((int)(tec.ptr - tbc.ptr)) & 0x7);
-
-            byte* tbcb = (byte*)tbw;
-            var tbcb_  = tbw_range;
-            byte* tbce = tbcb + toEnd;
-            var tbce_  = tbw_range + toEnd;
-
-            var bval = (byte) val;
-            for (; tbcb < tbce; tbcb++, tbce_++)
-            {
-                *tbcb = bval;
-                tbcb_.Access(0, true);
-            }
-
-            return tec.ptr - tbc.ptr;
-        }
-
         unsafe public static long ToNull(long targetLength, byte* t, ulong val = 0, long index = 0, long count = -1)
         {
             if (count < 0)
@@ -544,7 +512,6 @@ namespace cryptoprime
 
             return tec - tbc;
         }
-
         /*
         public unsafe static void BytesToNull(byte[] bytes, long firstNotNull = long.MaxValue, long start = 0)
         {
