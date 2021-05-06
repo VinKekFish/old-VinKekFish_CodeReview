@@ -1,0 +1,6 @@
+﻿Проверка VinKekFish_k1_base_20210419_keyGeneration по контрольному списку "Память.txt"
+
+В sources скопирована папка
+C:\dev\VinKekFish\vinkekfish\VinKekFish
+
+В папке "1" рассматривается список "Память.txt"
