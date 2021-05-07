@@ -1,0 +1,8 @@
+﻿Проверяем по списку "Память.txt" классы \VinKekFish\vinkekfish\VinKekFish
+	VinKekFish_k1_base_20210419_keyGeneration
+	VinKekFish_k1_base_20210419
+
+Проверка в папке "1"
+
+Проверяется файл .\1\VinKekFish\VinKekFish-20210419\Documentation\VinKekFish_k1_base_20210419_состояния.md
+

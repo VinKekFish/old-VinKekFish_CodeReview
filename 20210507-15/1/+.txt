@@ -1,0 +1,20 @@
+﻿3. Проверка документации: проверить, что состояния объектов где-то документированы и ссылка на документацию указана в исходниках
+
+Проверить файлы
+-	.\VinKekFish\VinKekFish-20210419\Documentation\VinKekFish_k1_base_20210419_keyGeneration_конфи.md
+	Не относится к состояниям
+-	.\VinKekFish\VinKekFish-20210419\Documentation\VinKekFish_k1_base_20210419_keyGeneration-ввод-вывод.md
+	Не относится к состояниям
+
+Файлы для проверки
+?	.\VinKekFish\VinKekFish-20210419\Documentation\VinKekFish_k1_base_20210419_состояния.md
+?	.\VinKekFish\VinKekFish-20210419\Documentation\VinKekFish_k1_base_20210419_keyGeneration_состояния.md
+
+
++	.\VinKekFish\VinKekFish-20210419\Documentation\VinKekFish_k1_base_20210419_состояния.md
+	Файл .\VinKekFish\VinKekFish-20210419\VinKekFish_k1_base_20210419.cs содержит указание на исходники
+	
+!	.\VinKekFish\VinKekFish-20210419\Documentation\VinKekFish_k1_base_20210419_keyGeneration_состояния.md
+	Найдена ошибка. Путь в .\VinKekFish\VinKekFish-20210419\VinKekFish_k1_base_20210419_keyGeneration.cs неверный
+	Исправлено.
+	
