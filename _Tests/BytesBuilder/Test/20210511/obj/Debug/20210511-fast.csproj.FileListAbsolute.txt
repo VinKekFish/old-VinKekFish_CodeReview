@@ -1,0 +1,10 @@
+C:\dev\VinKekFish_CodeReview\_Tests\BytesBuilder\Test\20210511\bin\Debug\20210511-fast.exe.config
+C:\dev\VinKekFish_CodeReview\_Tests\BytesBuilder\Test\20210511\bin\Debug\20210511-fast.exe
+C:\dev\VinKekFish_CodeReview\_Tests\BytesBuilder\Test\20210511\bin\Debug\20210511-fast.pdb
+C:\dev\VinKekFish_CodeReview\_Tests\BytesBuilder\Test\20210511\bin\Debug\cryptoprime.dll
+C:\dev\VinKekFish_CodeReview\_Tests\BytesBuilder\Test\20210511\bin\Debug\cryptoprime.pdb
+C:\dev\VinKekFish_CodeReview\_Tests\BytesBuilder\Test\20210511\obj\Debug\20210511-fast.csproj.CoreCompileInputs.cache
+C:\dev\VinKekFish_CodeReview\_Tests\BytesBuilder\Test\20210511\obj\Debug\20210511-fast.csproj.CopyComplete
+C:\dev\VinKekFish_CodeReview\_Tests\BytesBuilder\Test\20210511\obj\Debug\20210511-fast.exe
+C:\dev\VinKekFish_CodeReview\_Tests\BytesBuilder\Test\20210511\obj\Debug\20210511-fast.pdb
+C:\dev\VinKekFish_CodeReview\_Tests\BytesBuilder\Test\20210511\obj\Debug\20210511-fast.csprojAssemblyReference.cache

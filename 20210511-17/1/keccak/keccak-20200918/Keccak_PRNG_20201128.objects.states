@@ -1,0 +1,51 @@
+﻿
+См. также файл Keccak_PRNG_20201128.objects.cFNNZfO63pYL
+
+LSpqK5mC. Завершающие состояния (проход по всей программе)
+	0. Если для объекта нет отдельного списка состояний, использовать следующий
+		MCaZG5ctJub4
+			0. Не создан
+			1. Не инициализирован
+			2. Готов к использованию
+			3. Не готов к использованию (если такое может быть; в том числе, уничтожен, но доступен)
+			4. Очищен
+			5. Уничтожен
+			6. Ссылка на объект очищена
+	Также можно использовать доп. списки
+		KmMYNx4twrG9. Не создан - ссылка нулевая / Есть ссылка / Ссылка очищена
+		hzc21pUOzxfb. Только для чтения / Допустимы все операции
+		NSMdQiQ9Xfbb. Ссылка имеет копии / ссылка не имеет копий
+		CYGFmLaJZccb. Копия ссылки должна быть очищена (освобождена) / Копия ссылки не должна быть очищена (освобождена)
+
+
+
+Класс Keccak_PRNG_20201128
+AllocatorForUnsafeMemoryInterface 	allocator
+	MCaZG5ctJub4.Готов к использованию
+
+AllocatorForUnsafeMemoryInterface 	allocatorForSaveBytes
+	MCaZG5ctJub4.Готов к использованию
+
+BytesBuilderForPointers 		  	INPUT
+	MCaZG5ctJub4.Готов к использованию
+
+Record 								inputTo
+	inputTo
+		MCaZG5ctJub4.Не инициализирован
+
+bool								inputReady = false (соотв. состоянию inputTo)
+BytesBuilderForPointers 			output
+	MCaZG5ctJub4.Готов к использованию
+
+
+Класс Keccak_base_20200918
+Нет доп. объектов
+
+
+Класс Keccak_base_20200918
+Нет доп. объектов
+
+
+Класс Keccak_abstract
+byte[] 		State
+	MCaZG5ctJub4.Готов к использованию

@@ -1,0 +1,5 @@
+﻿Производится проверка 
+\VinKekFish\vinkekfish\keccak\keccak-20200918\Keccak_PRNG_20201128.cs
+и классов-предков
+
+Папка "1".

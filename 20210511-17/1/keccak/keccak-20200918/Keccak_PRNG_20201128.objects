@@ -1,0 +1,29 @@
+﻿
+Объекты, используемые в программе
+
+Класс Keccak_PRNG_20201128
+AllocatorForUnsafeMemoryInterface 	allocator
+AllocatorForUnsafeMemoryInterface 	allocatorForSaveBytes
+BytesBuilderForPointers 		  	INPUT
+Record 								inputTo
+bool								inputReady
+BytesBuilderForPointers 			output
+
+
+Класс Keccak_base_20200918
+Нет доп. объектов
+
+
+Класс Keccak_base_20200918
+Нет доп. объектов
+
+
+Класс Keccak_abstract
+byte[] 		State
+
+
+Глобально используемые объекты
+Отсутствуют объекты, за которыми необходим контроль
+	не нуждаются в контроле
+		GC
+		статические члены BytesBuilde
