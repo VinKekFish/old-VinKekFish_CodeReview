@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "20210511-fast", "20210511\2
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "20210511-keccakprng", "20210511-keccakprng\20210511-keccakprng.csproj", "{F1B63AA6-8CC7-4FDC-B74F-810F77F96362}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightRandomGenerator_test", "LightRandomGenerator_test\LightRandomGenerator_test.csproj", "{33B601B3-E8E8-4D3C-B658-1C6F59C14437}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{F1B63AA6-8CC7-4FDC-B74F-810F77F96362}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F1B63AA6-8CC7-4FDC-B74F-810F77F96362}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F1B63AA6-8CC7-4FDC-B74F-810F77F96362}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33B601B3-E8E8-4D3C-B658-1C6F59C14437}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33B601B3-E8E8-4D3C-B658-1C6F59C14437}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33B601B3-E8E8-4D3C-B658-1C6F59C14437}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33B601B3-E8E8-4D3C-B658-1C6F59C14437}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
