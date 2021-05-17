@@ -33,7 +33,7 @@
             <summary>Если <see langword="true"/>, то останавливает пишущий (суммирующий) поток, когда данные сгенерированны в нужном количестве (иначе поток так и будет крутиться)</summary>
         </member>
         <member name="F:vinkekfish.LightRandomGenerator.doWaitR">
-            <summary>Если <see langword="true"/>, то читающий (выводящий байты в массив) потом будет ждать, когда данные сгенерируются в нужном количестве. Если <see langword="false"/>, то читающий поток будет записывать данные дальше</summary>
+            <summary>Если <see langword="true"/>, то читающий (выводящий байты в массив) поток будет ждать, когда данные сгенерируются в нужном количестве. Если <see langword="false"/>, то читающий поток будет записывать данные дальше</summary>
         </member>
         <member name="F:vinkekfish.LightRandomGenerator.WaitState">
             <summary>Переменная устанавливается, когда поток сгенерировал все байты и установил приоритет потоков в низший</summary>
@@ -267,18 +267,14 @@
         <member name="F:vinkekfish.VinKekFish_k1_base_20210419_keyGeneration.BackgroundSleepCount">
             <summary>См. описание параметра EnterToBackgroundCycle</summary>
         </member>
-        <member name="F:vinkekfish.VinKekFish_k1_base_20210419_keyGeneration.BackgroundKeccakCount">
-            <summary>См. описание поля BackgourndGenerated</summary>
-        </member>
         <member name="F:vinkekfish.VinKekFish_k1_base_20210419_keyGeneration.BackgourndGenerated">
             <summary>Количество сгенерированных блоков энтропии.
             Считается, что на один байт приходится 1 бит энтропии, то есть на BLOCK_SIZE=512 приходится 512 битов
             (рекомендуется ещё уменьшать в пару раз хотя бы).
-            Лучше всего, если считать, что на один блок приходится 1/8 бита энтропии, то есть при BackgroundKeccakCount = 8 переменная BackgourndGenerated - это количество сгенерированных битов энтропии.
+            Если считать, что на один блок 4096 байтов приходится 1 бит энтропии, то BackgourndGenerated - это количество сгенерированных битов энтропии.
             В любом случае, это не надёжный источник рандомизации, вместе с ним необходимо использовать и другие источники, если возможно.
             При таком подходе, условно, примерно за 100 секунд на одном ядре с максимальной загрузкой генерируется ключ на 4096 битов длиной, так что производительность всё равно хорошая
-            BackgroundKeccakCount устанавливает сколько раз срабатывает keccak, прежде чем данные попадут в VinKekFish. BackgroundKeccakCount = 8 уменьшает количество данных в VinKekFish в 8 раз.
-            Запись в данную переменную производить с помощью lock (this) - допускается обнуление данной переменной</summary>
+            Запись в данную переменную производить с помощью lock (this) - допускается только обнуление данной переменной</summary>
         </member>
         <member name="M:vinkekfish.VinKekFish_k1_base_20210419_keyGeneration.EnterToBackgroundCycle(System.UInt16,System.UInt16,System.Boolean,System.Boolean,vinkekfish.LightRandomGenerator)">
             <summary>Войти в цикл дополнительной инициализации псевдослучайными значениями.
@@ -289,7 +285,7 @@
             BackgroundSleepCount = 0 - самое быстрое, загрузка почти всего процессорного ядра, если оно не занято чем-то ещё.
             BackgroundSleepCount = 72 - это загрузка на уровне не выше пары процентов от одного ядра.
             Происходит генерация где-то одного блока VinKekFish (BLOCK_SIZE байтов) за секунду или менее (то BackgourndGenerated приращается на единицу за секунду или быстрее) - то есть 1 бит рандомизации в секунду</param>
-            <param name="BackgroundSleepCount">После таймаута идёт генерация блоков для keccak. На один таймаут приходится BackgroundSleepCount блоков. См. также BackgroundKeccakCount</param>
+            <param name="BackgroundSleepCount">После таймаута идёт генерация блоков для keccak. На один таймаут приходится BackgroundSleepCount блоков.</param>
             <param name="generator">Генератор нестойких псевдослучайных чисел, должен генерировать по 64 байта в блок. В ExitFromBackgroundCycle автоматически удаляется</param>
             <param name="doWaitR">Параметр инициализирует одноимённое поле generator.doWaitR, но только если generator = null</param>
             <param name="doWaitW">Параметр инициализирует одноимённое поле generator.doWaitW, но только если generator = null</param>

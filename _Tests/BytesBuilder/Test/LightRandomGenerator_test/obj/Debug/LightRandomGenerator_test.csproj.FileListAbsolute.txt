@@ -10,3 +10,4 @@ C:\dev\VinKekFish_CodeReview\_Tests\BytesBuilder\Test\LightRandomGenerator_test\
 C:\dev\VinKekFish_CodeReview\_Tests\BytesBuilder\Test\LightRandomGenerator_test\obj\Debug\LightRandomGenerator_test.csproj.CopyComplete
 C:\dev\VinKekFish_CodeReview\_Tests\BytesBuilder\Test\LightRandomGenerator_test\obj\Debug\LightRandomGenerator_test.exe
 C:\dev\VinKekFish_CodeReview\_Tests\BytesBuilder\Test\LightRandomGenerator_test\obj\Debug\LightRandomGenerator_test.pdb
+C:\dev\VinKekFish_CodeReview\_Tests\BytesBuilder\Test\LightRandomGenerator_test\obj\Debug\LightRandomGenerator_test.csprojAssemblyReference.cache

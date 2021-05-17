@@ -20,7 +20,6 @@ namespace LightRandomGenerator_test
 
             var prng = new vinkekfish.VinKekFish_k1_base_20210419_keyGeneration();
 
-            prng.BackgroundKeccakCount = 1;
             prng.EnterToBackgroundCycle(0);
             Thread.Sleep(timeout * 1000);
             prng.ExitFromBackgroundCycle();
