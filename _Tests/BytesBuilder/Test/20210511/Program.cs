@@ -29,7 +29,7 @@ namespace _20210511
             var ms  = (dt2-dt1).TotalMilliseconds;
             Console.WriteLine("Операций в секунду: " + (count * 1000.0 / ms));
 
-            bb.clear();
+            bb.Clear();
 
 
             // 740 тыс.
@@ -42,7 +42,7 @@ namespace _20210511
             ms  = (dt2-dt1).TotalMilliseconds;
             Console.WriteLine("Операций в секунду: " + (count * 1000.0 / ms));
 
-            bb.clear();
+            bb.Clear();
             bb.add(alloc.AllocMemory(size));
 
 
@@ -70,7 +70,7 @@ namespace _20210511
             ms  = (dt2-dt1).TotalMilliseconds;
             Console.WriteLine("Операций в секунду: " + (count * 1000.0 / ms));
 
-            bb.clear();
+            bb.Clear();
 
 
             // 3 800 тыс.
@@ -87,7 +87,7 @@ namespace _20210511
             ms  = (dt2-dt1).TotalMilliseconds;
             Console.WriteLine("Операций в секунду: " + (count * 1000.0 / ms));
             r.Dispose();
-            bb.clear();
+            bb.Clear();
 
 
 
