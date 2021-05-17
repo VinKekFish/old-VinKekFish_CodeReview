@@ -35,6 +35,9 @@
         <member name="F:vinkekfish.LightRandomGenerator.doWaitR">
             <summary>Если <see langword="true"/>, то читающий (выводящий байты в массив) потом будет ждать, когда данные сгенерируются в нужном количестве. Если <see langword="false"/>, то читающий поток будет записывать данные дальше</summary>
         </member>
+        <member name="F:vinkekfish.LightRandomGenerator.WaitState">
+            <summary>Переменная устанавливается, когда поток сгенерировал все байты и установил приоритет потоков в низший</summary>
+        </member>
         <member name="F:vinkekfish.LightRandomGenerator.GeneratedBytes">
             <summary>Брать байты можно и прямо из массива после WaitForGenerator. После взятия вызвать ResetGeneratedBytes. Брать с lock(this)</summary>
         </member>
@@ -286,7 +289,7 @@
             BackgroundSleepCount = 0 - самое быстрое, загрузка почти всего процессорного ядра, если оно не занято чем-то ещё.
             BackgroundSleepCount = 72 - это загрузка на уровне не выше пары процентов от одного ядра.
             Происходит генерация где-то одного блока VinKekFish (BLOCK_SIZE байтов) за секунду или менее (то BackgourndGenerated приращается на единицу за секунду или быстрее) - то есть 1 бит рандомизации в секунду</param>
-            <param name="BackgroundSleepCount">После таймаута идёт генерация блоков для keccak. На один таймаут приходится BackgroundSleepCount блоков</param>
+            <param name="BackgroundSleepCount">После таймаута идёт генерация блоков для keccak. На один таймаут приходится BackgroundSleepCount блоков. См. также BackgroundKeccakCount</param>
             <param name="generator">Генератор нестойких псевдослучайных чисел, должен генерировать по 64 байта в блок. В ExitFromBackgroundCycle автоматически удаляется</param>
             <param name="doWaitR">Параметр инициализирует одноимённое поле generator.doWaitR, но только если generator = null</param>
             <param name="doWaitW">Параметр инициализирует одноимённое поле generator.doWaitW, но только если generator = null</param>
@@ -326,7 +329,10 @@
             <param name="doubleHash">DoubleHash.one - обычный хеш 64-ре байта, DoubleHash.two - два раза по 64-ре байта, DoubleHash.full72 - один раз 72 байта</param>
             <returns>Массив с запрошенным хешем</returns>
         </member>
-        <member name="M:vinkekfish.keccak.keccak_20200918.Keccak_PRNG_20201128.#ctor(cryptoprime.BytesBuilderForPointers.AllocatorForUnsafeMemoryInterface)">
+        <member name="T:vinkekfish.keccak.keccak_20200918.Keccak_PRNG_20201128">
+            <summary>Криптостойкий ГПСЧ</summary>
+        </member>
+        <member name="M:vinkekfish.keccak.keccak_20200918.Keccak_PRNG_20201128.#ctor(cryptoprime.BytesBuilderForPointers.AllocatorForUnsafeMemoryInterface,System.Int32)">
             <summary>Создаёт пустой объект</summary>
             <param name="allocator">Способ выделения памяти внутри объекта, кроме выделения памяти для вывода. Может быть null.</param>
             <exception cref="T:System.OutOfMemoryException"></exception>
@@ -338,6 +344,9 @@
         <member name="F:vinkekfish.keccak.keccak_20200918.Keccak_PRNG_20201128.INPUT">
             <summary>Сюда можно добавлять байты для ввода</summary>
         </member>
+        <member name="F:vinkekfish.keccak.keccak_20200918.Keccak_PRNG_20201128.InputSize">
+            <summary>Размер блока вводимой (и выводимой) информации</summary>
+        </member>
         <member name="F:vinkekfish.keccak.keccak_20200918.Keccak_PRNG_20201128.inputTo">
             <summary>Это массив для немедленного введения в Sponge на следующем шаге</summary>
         </member>
@@ -346,6 +355,12 @@
         </member>
         <member name="P:vinkekfish.keccak.keccak_20200918.Keccak_PRNG_20201128.isInputReady">
             <summary>Если <see langword="true"/>, то в массиве inputTo ожидают данные. Можно вызывать calStep</summary>
+        </member>
+        <member name="F:vinkekfish.keccak.keccak_20200918.Keccak_PRNG_20201128.output">
+            <summary>Массив, представляющий результаты вывода</summary>
+        </member>
+        <member name="F:vinkekfish.keccak.keccak_20200918.Keccak_PRNG_20201128.outputBuffer">
+            <summary>Буффер используется для вывода данных и в других целях. Осторожно, его могут использовать совершенно разные функции</summary>
         </member>
         <member name="P:vinkekfish.keccak.keccak_20200918.Keccak_PRNG_20201128.outputCount">
             <summary>Количество элементов, которые доступны для вывода без применения криптографических операций</summary>
@@ -366,7 +381,17 @@
         <member name="M:vinkekfish.keccak.keccak_20200918.Keccak_PRNG_20201128.InputKeyAndStep(System.Byte*,System.Int64,System.Byte*,System.Int64)">
             <summary>Ввести секретный ключ и ОВИ (вместе с криптографическим преобразованием)</summary>
             <param name="key">Ключ. Должен быть очищен вручную (можно сразу после вызова функции)</param>
+            <param name="key_length">Длина ключа</param>
             <param name="OIV">Открытый вектор инициализации, не более InputSize (не более 64 байтов). Может быть null. Должен быть очищен вручную (можно сразу после вызова функции)</param>
+            <param name="OIV_length">Длина ОВИ</param>
+        </member>
+        <member name="M:vinkekfish.keccak.keccak_20200918.Keccak_PRNG_20201128.Clear(System.Boolean)">
+            <summary>Очистка объекта (перезабивает данные нулями)</summary>
+            <param name="GcCollect"></param>
+        </member>
+        <member name="M:vinkekfish.keccak.keccak_20200918.Keccak_PRNG_20201128.Dispose(System.Boolean)">
+            <summary>Уничтожение объекта: очищает объект и освобождает все связанные с ним ресурсы</summary>
+            <param name="disposing">True из любого места программы, кроме деструктора</param>
         </member>
         <member name="M:vinkekfish.keccak.keccak_20200918.Keccak_PRNG_20201128.InputBytesImmediately(System.Boolean,System.Boolean)">
             <summary>Переносит байты из очереди ожидания в массив байтов для непосредственного ввода в криптографическое состояние. Не выполняет криптографических операций</summary>

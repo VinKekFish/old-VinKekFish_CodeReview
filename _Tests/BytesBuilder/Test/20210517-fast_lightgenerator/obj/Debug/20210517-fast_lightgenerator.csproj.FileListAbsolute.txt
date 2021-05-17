@@ -1,0 +1,13 @@
+C:\dev\VinKekFish_CodeReview\_Tests\BytesBuilder\Test\20210517-fast_lightgenerator\bin\Debug\20210517-fast_lightgenerator.exe.config
+C:\dev\VinKekFish_CodeReview\_Tests\BytesBuilder\Test\20210517-fast_lightgenerator\bin\Debug\20210517-fast_lightgenerator.exe
+C:\dev\VinKekFish_CodeReview\_Tests\BytesBuilder\Test\20210517-fast_lightgenerator\bin\Debug\20210517-fast_lightgenerator.pdb
+C:\dev\VinKekFish_CodeReview\_Tests\BytesBuilder\Test\20210517-fast_lightgenerator\bin\Debug\cryptoprime.dll
+C:\dev\VinKekFish_CodeReview\_Tests\BytesBuilder\Test\20210517-fast_lightgenerator\bin\Debug\vinkekfish.dll
+C:\dev\VinKekFish_CodeReview\_Tests\BytesBuilder\Test\20210517-fast_lightgenerator\bin\Debug\cryptoprime.pdb
+C:\dev\VinKekFish_CodeReview\_Tests\BytesBuilder\Test\20210517-fast_lightgenerator\bin\Debug\vinkekfish.pdb
+C:\dev\VinKekFish_CodeReview\_Tests\BytesBuilder\Test\20210517-fast_lightgenerator\bin\Debug\vinkekfish.xml
+C:\dev\VinKekFish_CodeReview\_Tests\BytesBuilder\Test\20210517-fast_lightgenerator\obj\Debug\20210517-fast_lightgenerator.csprojAssemblyReference.cache
+C:\dev\VinKekFish_CodeReview\_Tests\BytesBuilder\Test\20210517-fast_lightgenerator\obj\Debug\20210517-fast_lightgenerator.csproj.CoreCompileInputs.cache
+C:\dev\VinKekFish_CodeReview\_Tests\BytesBuilder\Test\20210517-fast_lightgenerator\obj\Debug\20210517-fast_lightgenerator.csproj.CopyComplete
+C:\dev\VinKekFish_CodeReview\_Tests\BytesBuilder\Test\20210517-fast_lightgenerator\obj\Debug\20210517-fast_lightgenerator.exe
+C:\dev\VinKekFish_CodeReview\_Tests\BytesBuilder\Test\20210517-fast_lightgenerator\obj\Debug\20210517-fast_lightgenerator.pdb

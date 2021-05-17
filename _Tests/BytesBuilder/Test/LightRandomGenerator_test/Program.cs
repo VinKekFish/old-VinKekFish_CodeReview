@@ -14,12 +14,15 @@ namespace LightRandomGenerator_test
             // const int count = 65536;
             // const int size  = 4096;
 
+            const int timeout = 2;
+
             var b0 = new byte[4] {0, 0, 0, 0};
 
             var prng = new vinkekfish.VinKekFish_k1_base_20210419_keyGeneration();
 
-            prng.EnterToBackgroundCycle();
-            Thread.Sleep(1000);
+            prng.BackgroundKeccakCount = 1;
+            prng.EnterToBackgroundCycle(0);
+            Thread.Sleep(timeout * 1000);
             prng.ExitFromBackgroundCycle();
                 /*
             // 720 тыс.
@@ -33,7 +36,7 @@ namespace LightRandomGenerator_test
             Console.WriteLine("Операций в секунду: " + (count * 1000.0 / ms));
             */
 
-            Console.WriteLine("Блоков в секунду: " + prng.BackgourndGenerated);
+            Console.WriteLine("Блоков в секунду: " + ((float)prng.BackgourndGenerated / timeout).ToString("F1"));
 
             prng.Dispose();
 

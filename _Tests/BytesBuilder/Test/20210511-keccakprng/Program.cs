@@ -47,16 +47,7 @@ namespace _20210511_keccakprng
             using (var b8 = new cryptoprime.BytesBuilderForPointers.AllocHGlobal_AllocatorForUnsafeMemory().AllocMemory(8))
             for (var i = 0; i < countForPermutations; i++)
             {
-                //prng.calcStep(inputReadyCheck: prng.isInputReady, SaveBytes: true);
-                // prng.doRandomPermutationForUShorts(table1);
-
-                var len = (ulong) table1.LongLength;
-                for (ulong j = 0; j < len - 1; j++)
-                {
-                    // Keccak_PRNG_20201128.getCutoffForUnsignedInteger(0, (ulong) len - j - 1, out ulong cutoff, out ulong range);
-                    Keccak_PRNG_20201128.getCutoffForUnsignedInteger(0, 3, out ulong cutoff, out ulong range);
-                    prng.getUnsignedInteger(0, cutoff, range, b8);
-                }
+                doPermFantom(b8);
             }
             dt2 = DateTime.Now;
             ms  = (dt2-dt1).TotalMilliseconds;
@@ -76,6 +67,16 @@ namespace _20210511_keccakprng
             prng.Dispose();
 
             Console.ReadKey();
+
+            void doPermFantom(cryptoprime.BytesBuilderForPointers.Record b8)
+            {
+                var len = (ulong)table1.LongLength;
+                for (ulong j = 0; j < len - 1; j++)
+                {
+                    Keccak_PRNG_20201128.getCutoffForUnsignedInteger(0, (ulong)len - j - 1, out ulong cutoff, out ulong range);
+                    prng.getUnsignedInteger(0, cutoff, range, b8);
+                }
+            }
         }
     }
 }
