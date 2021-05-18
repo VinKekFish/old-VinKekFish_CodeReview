@@ -10,23 +10,27 @@ using CodeGenerated.Cryptoprimes;
 namespace cryptoprime.VinKekFish
 {
     /// <summary>Базовая однопоточная реализация VinKekFish для K = 1. Использование для тестирования. См. также descr.md</summary>
-    public static unsafe class VinKekFishBase_etalonK1
-    {
-        // Размер криптографического состояния
-        public const int CryptoStateLen          = 3200; // В байтах
-        public const int CryptoStateLenKeccak    = CryptoStateLen / KeccakBlockLen;    // Размер криптографического состояния в блоках keccak
-        public const int CryptoStateLenThreeFish = CryptoStateLen / ThreeFishBlockLen; // Размер криптографического состояния в блоках ThreeFish
-
-        public const int CryptoTweakLen          = 8*2; // В байтах
-
-        public const int BLOCK_SIZE              = 512;     // 4096 битов
-        public const int MAX_SINGLE_KEY          = 2048;
+    public static unsafe class VinKekFishBase_etalonK1  // Была ошибка: отсутствовали комментарии в коде
+    {                                                                                   /// <summary>Размер криптографического состояния в байтах (3200)</summary>
+        public const int CryptoStateLen          = 3200;                                /// <summary>Размер криптографического состояния в блоках keccak (16)</summary>
+        public const int CryptoStateLenKeccak    = CryptoStateLen / KeccakBlockLen;     /// <summary>Размер криптографического состояния в блоках ThreeFish (25)</summary>
+        public const int CryptoStateLenThreeFish = CryptoStateLen / ThreeFishBlockLen;
+                                                                                        /// <summary>Размер tweak (16 байтов, 2*ulong)</summary>
+        public const int CryptoTweakLen          = 8*2;
+                                                                                        /// <summary>Размер блока ввода-вывода (512 байтов = 4096 битов)</summary>
+        public const int BLOCK_SIZE              = 512;                                 /// <summary>Размер максимального блока для ввода начала ключа: 2048 байтов (16384 бита)</summary>
+        public const int MAX_SINGLE_KEY          = 2048;                                /// <summary>Максимально допустимая длина ОВИ (открытого вектора инициализации): 1148 байтов = 9184 битов</summary>
         public const int MAX_OIV                 = 1148;
-        public const int MIN_ROUNDS              = 4;
-        public const int NORMAL_ROUNDS           = 64;
+                                                                                        /// <summary>Минимально допустимое количество раундов</summary>
+        public const int MIN_ROUNDS              = 1;                                   /// <summary>Нормальное количество раундов</summary>
+        public const int NORMAL_ROUNDS           = 64;                                  /// <summary>Уменьшенное количество раундов</summary>
         public const int REDUCED_ROUNDS          = 16;
-        public const int NORMAL_KEY              = 4096;
-        public const int RECOMMENDED_KEY         = 8192;
+                                                                                        /// <summary>Нормальная длина ключа в байтах (1024 байта = 8192 бита)</summary>
+        public const int NORMAL_KEY              = 1024;                                /// <summary>Рекомендованная длина ключа в байтах (2048 байтов = 16384 бита)</summary>
+        public const int RECOMMENDED_KEY         = 2048;                                /// <summary>Уменьшенная длина ключа в байтах (512 байтов = 4096 битов)</summary>
+        public const int REDUCED_KEY             = 512;
+
+        // Добавление: добавил дополнительные константы и изменил те, что были при проверке и чтении документации по губке https://keccak.team/files/SpongeFunctions.pdf
 
         /// <summary>Поглощение ключа губкой. Полное поглощение, включая криптографию. Пользователю не нужно, т.к. нужно использовать более специфические классы, например, VinKekFish_k1_base_20210419_keyGeneration</summary>
         /// <param name="key">Ключ</param>
@@ -35,11 +39,11 @@ namespace cryptoprime.VinKekFish
         /// <param name="OIV_length">Длина открытого вектора инициализации</param>
         /// <param name="state">Криптографическое состояние</param>
         /// <param name="state2">Вспомогательный массив криптографического состояния</param>
-        /// <param name="b">Вспомогательный массив для функции keccak-f, размер b_size (25*8)</param>
-        /// <param name="c">Вспомогательный массив для функции keccak-f, размер b_size (05*8)</param>
-        /// <param name="tweak">Tweak</param>
-        /// <param name="tweakTmp">Вспомогательный массив для хранения tweak</param>
-        /// <param name="tweakTmp2">Второй вспомогательный массив для хранения tweak</param>
+        /// <param name="b">Вспомогательный массив для функции keccak-f, размер b_size (25*8=200)</param>
+        /// <param name="c">Вспомогательный массив для функции keccak-f, размер c_size (05*8=40)</param>
+        /// <param name="tweak">Tweak, длина CryptoTweakLen (16)</param>
+        /// <param name="tweakTmp">Вспомогательный массив для хранения tweak (длина CryptoTweakLen)</param>
+        /// <param name="tweakTmp2">Второй вспомогательный массив для хранения tweak (длина CryptoTweakLen)</param>
         /// <param name="Initiated"> При пользовательском вызове всегда false. Если <see langword="false"/>, то state инициализированно, но никакие данные не вводились. Если true, то в state уже вводились данные: например, другой ключ. Если false - идёт перезапись. Если <see langword="true"/> - поглощение через xor</param>
         /// <param name="SecondKey">При пользовательском вызове всегда false. Вторичный отрезок ключа: при рекурсивном вызове этот параметр равен true, означая, что идёт поглощение следующих за первым отрезков ключей</param>
         /// <param name="R">Количество раундов для первого поглощения</param>
@@ -71,44 +75,60 @@ namespace cryptoprime.VinKekFish
                 throw new ArgumentNullException("VinKekFishBase_etalonK1.InputKey: key_length <= 0");
 
             if (R < MIN_ROUNDS)
-                throw new ArgumentOutOfRangeException("R < MIN_ROUNDS");
+                throw new ArgumentOutOfRangeException("R < MIN_ROUNDS");        // была ошибка: Добавлены локализующее сообщение, изменил MIN_INNER_ROUNDS
             if (RE < MIN_ROUNDS && !SecondKey)
-                throw new ArgumentOutOfRangeException("R < MIN_ROUNDS");
+                throw new ArgumentOutOfRangeException("RE < MIN_ROUNDS && !SecondKey"); // была ошибка: Исправлено неверное сообщение об ошибке
 
             var dataLen = key_length;
-            var data    = key;
+            var data    = key; // key:[0, key_length]
             if (SecondKey)
             {
+                // dataLen всегда не более BLOCK_SIZE
+                // dataLen никогда не увеличивается и равна key_length или менее
                 if (dataLen > BLOCK_SIZE)
                     dataLen = BLOCK_SIZE;
 
+                // data:[0, BLOCK_SIZE], data:[dataLen], data:[key_length]
+                
+                // i:[0, dataLen]
                 for (ulong i = 0; i < dataLen; i++, data++)
                 {
-                    state[i+2] ^= *data;
-                }
+                    state[i+2] ^= *data;        // i+2 - это допустимо, т.к. речь идёт о вводе по алгоритму именно нужного размера
+                } // state имеет размер CryptoStateLen (3200). Значит i всегда внутри state, т.к. BLOCK_SIZE = 512+2 < 3200
+
+                // data = key + dataLen
+                // data:[key_length - dataLen]
+                // Если key_length <= BLOCK_SIZE, то data:[0]
             }
             else
             {
                 if (dataLen > MAX_SINGLE_KEY)
                     dataLen = MAX_SINGLE_KEY;
 
+                // data:[0, MAX_SINGLE_KEY], data:[dataLen], data:[key_length]
+
                 for (ulong i = 0; i < dataLen; i++, data++)
                 {
                     state[i+2] = *data;
-                }
+                } // Аналогично, 2048+2 < 3200
+
+                // data = key + dataLen
+                // data:[key_length - dataLen]
+                // Если key_length <= MAX_SINGLE_KEY, то data:[0]
+                // метка :MEdMiY2Z44i6
             }
 
             byte len1 = (byte) dataLen;
             byte len2 = (byte) (dataLen >> 8);
 
-            state[0] ^= len1;
+            state[0] ^= len1;       // state нигде не изменялся и имеет индексы 0 и 1
             state[1] ^= len2;
 
             tweak[0] += 1253539379;
 
             if (!SecondKey)
             {
-                tweak[1] += key_length;
+                tweak[1] += key_length; // tweak имеет 2 элемента ulong, 1 < 2
 
                 if (OIV != null && OIV_length > 0)
                 {
@@ -116,12 +136,14 @@ namespace cryptoprime.VinKekFish
                     len2 = (byte) (OIV_length >> 8);
 
                     state[2050] ^= len1;
-                    state[2051] ^= len2;
-
+                    state[2051] ^= len2;        // 2051 < 3200
+                    // OIV_length:[1, MAX_OIV] = [1, 1148]
                     for (ulong i = 0; i < OIV_length; i++, OIV++)
                     {
                         state[i+2052] = *OIV;
                     }
+                    // Оканчиваем на i = OIV_length - 1 = 1148 - 1 = 1147
+                    // 1147 + 2052 = 3199 < 3200
                 }
             }
 
@@ -136,7 +158,7 @@ namespace cryptoprime.VinKekFish
             {
                 InputKey
                 (
-                    key:        data,
+                    key:        data,           // Это соответствует размеру выше data:[key_length - dataLen] (метка MEdMiY2Z44i6 )
                     key_length: key_length - dataLen,
 
                     SecondKey:  true,
@@ -168,20 +190,22 @@ namespace cryptoprime.VinKekFish
         /// <summary>Сырой ввод данных. Вводит данные в состояние путём перезатирания (режим OVERWRITE), изменяет tweak. Не вызывает криптографические функции</summary>
         /// <param name="data">Указатель на вводимые данные, может быть null, если dataLen == 0</param>
         /// <param name="state">Указатель на криптографическое состояние</param>
-        /// <param name="dataLen">Длина вводимых данных, не более BLOCK_SIZE</param>
+        /// <param name="dataLen">Длина вводимых данных, не более BLOCK_SIZE (512 байтов)</param>
         /// <param name="tweak">Указатель на tweak (для соответствующего изменения tweak)</param>
         /// <param name="regime">Счётчик режима ввода</param>
-        public static void InputData_Overwrite(byte * data, byte * state, ulong dataLen, ulong * tweak, byte regime)
-        {
+        /// <param name="nullPaddding">Если <see langword="true"/>, то если данных меньше, чем BLOCK_SIZE, оставшиеся байты будут перезатёрты нулями, обеспечивая необратимость. Иначе остальные байты останутся неизменными</param>
+        public static void InputData_Overwrite(byte * data, byte * state, ulong dataLen, ulong * tweak, byte regime, bool nullPaddding = true)
+        {// nullPaddding был добавлен в ходе проверки
             if (dataLen > BLOCK_SIZE)
                 throw new ArgumentOutOfRangeException();
 
             ulong i = 0;
             for (; i < dataLen; i++, data++)
             {
-                state[i+3] = *data;
+                state[i+3] = *data; // i + 3 = BLOCK_SIZE + 3 = 512 + 3 < 3200
             }
 
+            if (nullPaddding)
             for (; i < BLOCK_SIZE; i++)
             {
                 state[i+3] = 0;
@@ -207,7 +231,7 @@ namespace cryptoprime.VinKekFish
 
             for (long i = 0; i < dataLen; i++, data++)
             {
-                state[i+3] ^= *data;
+                state[i+3] ^= *data;    // BLOCK_SIZE = 512 < 3200; i < dataLen
             }
 
             byte len1 = (byte) dataLen;
@@ -224,7 +248,7 @@ namespace cryptoprime.VinKekFish
         public static void InputData_ChangeTweak(ulong * tweak, long dataLen, bool Overwrite, byte regime)
         {
             // Приращение tweak перед вводом данных
-            tweak[0] += 1253539379;
+            tweak[0] += 1253539379;         // tweak - массив, длиной 2. Всё в порядке, индексы 0 и 1.
 
             tweak[1] += (ulong) dataLen;
             if (Overwrite)
@@ -235,12 +259,13 @@ namespace cryptoprime.VinKekFish
         }
 
         /// <summary>Если никаких данных не введено в режиме Sponge (xor), изменяет tweak</summary>
-        public static void NoInputData_ChangeTweak(ulong * tweak, byte regime)
+        public static void NoInputData_ChangeTweak(byte * state, ulong * tweak, byte regime)
         {
             // Приращение tweak перед вводом данных
             tweak[0] += 1253539379;
 
             // tweak[1] += dataLen;
+            state[2] ^= regime;
 
             var reg = ((ulong) regime) << 40; // 8*5 - третий по старшинству байт, нумерация с 1
             tweak[1] += reg;

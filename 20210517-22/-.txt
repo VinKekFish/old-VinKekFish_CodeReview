@@ -1,3 +1,9 @@
 ﻿Производится проверка keccak_abstract и иже с ними на предмет выхода индексов за пределы допустимого диапазона
 
 .\1\VinKekFish\cryptoprime\keccak.cs
+
+Проверка завершилась успехом. Внесено несколько небольших изменений.
+
+Проверка:
+.\1\VinKekFish\cryptoprime\VinKekFish\VinKekFishBase_etalonK1.cs
+
