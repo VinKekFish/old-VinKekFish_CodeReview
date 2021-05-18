@@ -7,3 +7,4 @@
 Проверка:
 .\1\VinKekFish\cryptoprime\VinKekFish\VinKekFishBase_etalonK1.cs
 
+Проверка завершилась успехом. Внесено несколько небольших изменений.

@@ -216,6 +216,8 @@ namespace cryptoprime.VinKekFish
 
             len2 &= 0x80;   // Старший бит количества вводимых байтов устанавливается в 1, если используется режим Overwrite
 
+            // Ошибка с &= исправлена
+
             state[0] ^= len1;
             state[1] ^= len2;
             state[2] ^= regime;
@@ -278,7 +280,7 @@ namespace cryptoprime.VinKekFish
         /// <param name="tweakTmp2">Дополнительный массив для временного tweak, 16 байтов. Изменяется в функции.</param>
         /// <param name="state">Криптографическое состояние</param>
         /// <param name="state2">Вспомогательный массив для криптографического состояния</param>
-        /// <param name="tablesForPermutations">Массив таблиц перестановок на каждый раунд. Длина должна быть countOfRounds*4 (*CryptoStateLen*ushort на каждую таблицу)</param>
+        /// <param name="tablesForPermutations">Массив таблиц перестановок на каждый раунд. Длина должна быть countOfRounds*4 таблиц (CryptoStateLen*ushort на каждую таблицу)</param>
         /// <param name="b">Вспомогательный массив b для keccak.Keccackf</param>
         /// <param name="c">Вспомогательный массив c для keccak.Keccackf</param>
         public static void step(int countOfRounds, ulong * tweak, ulong * tweakTmp, ulong * tweakTmp2, byte * state, byte * state2, ushort * tablesForPermutations, byte* b, byte* c)
@@ -287,11 +289,20 @@ namespace cryptoprime.VinKekFish
             tweakTmp[1] = tweak[1];
 
             // Распределение впитывания
-            DoPermutation(state, state2, CryptoStateLen, transpose128_3200);
+            DoPermutation(state, state2, CryptoStateLen, transpose128_3200);    // CryptoStateLen действительно является верным значением длины
             DoThreefishForAllBlocks(state2, state, tweakTmp, tweakTmp2);
             DoPermutation(state, state2, CryptoStateLen, transpose128_3200);
             BytesBuilder.CopyTo(CryptoStateLen, CryptoStateLen, state2, state);
 
+            // tablesForPermutations имеет размер countOfRounds*4*CryptoStateLen*ushort
+            // За один проход цикла идёт приращение 4 раза на CryptoStateLen
+            // Так как tablesForPermutations имеет тип ushort * , то приращение на CryptoStateLen
+            // является приращением в байтах на CryptoStateLen * 2
+            // Таким образом, за один проход приращение идёт на 4 * CryptoStateLen * 2
+            // Всего проходов countOfRounds.
+            // Таким образом, всего идёт приращений на countOfRounds * 4 * CryptoStateLen * 2
+            // Это как раз и есть размер таблицы. То есть всё хорошо.
+            // tablesForPermutations после цикла не используется, т.к. полностью израсходована.
 
             // Основной шаг алгоритма: раунды
             for (int round = 0; round < countOfRounds; round++)
@@ -335,7 +346,7 @@ namespace cryptoprime.VinKekFish
         /// <param name="ringModulo">[0; ringModulo)</param>
         /// <returns>Выровненное число</returns>
         public static int getNumberFromRing(int i, int ringModulo)
-        {
+        {//  При проверка сокрыто. Реализация не эффективно для больших i
             while (i < 0)
                 i += ringModulo;
 
@@ -345,14 +356,14 @@ namespace cryptoprime.VinKekFish
             return i;
         }
 
-        const int ThreeFishBlockLen = 128;
+        const int ThreeFishBlockLen = 128;  // При проверке перенесено выше в константы
         const int    KeccakBlockLen = 200;
 
         /// <summary>Применяет ThreeFish поблочно ко всему состоянию алгоритма</summary>
-        /// <param name="beginCryptoState"></param>
-        /// <param name="finalCryptoState"></param>
+        /// <param name="beginCryptoState">Начальное криптографическое состояние (инициализированное)</param>
+        /// <param name="finalCryptoState">Финальное криптографическое состояние (для результата, будет перезатёрто)</param>
         /// <param name="tweak">Базовый tweak для раунда. Не изменяется</param>
-        /// <param name="len">Длина криптографического состояния в блоках ThreeFish1024 (по 128-мь байтов; ThreeFishBlockLen). len - нечётное</param>
+        /// <param name="tweakTmp">Дополнительный массив для временного tweak</param>
         public static unsafe void DoThreefishForAllBlocks(byte* beginCryptoState, byte * finalCryptoState, ulong * tweak, ulong * tweakTmp)
         {
             int len = CryptoStateLenThreeFish;
@@ -363,23 +374,37 @@ namespace cryptoprime.VinKekFish
             byte* cur = finalCryptoState;
             byte* key = beginCryptoState;
 
-            BytesBuilder.CopyTo(CryptoStateLen, CryptoStateLen, beginCryptoState, finalCryptoState);
+            BytesBuilder.CopyTo(CryptoStateLen, CryptoStateLen, beginCryptoState, finalCryptoState);    // CryptoStateLen - верно
 
             tweakTmp[0] = tweak[0];
             tweakTmp[1] = tweak[1];
 
             // getNumberFromRing не вызывается, вместо этого используется самостоятельный расчёт, он должен быть более быстрым
-            int j   = len >> 1;
+            int j   = len >> 1; // Начинаем с 12-ти, 25 / 2 = 12
             int add = 0;
 
             // cur - это финальное состояние, которое изменяется
             // key всегда вычисляется заново, т.к. он переходит через нуль - это массив ключевой информации для ThreeFish
             for (int i = 0; i < len; i++, j++, cur += ThreeFishBlockLen)
             {
+                // cur - это byte * , так что все приращения - в байтах
+                // cur += ThreeFishBlockLen - это приращение на 128 байтов.
+                // Таких приращений всего len = CryptoStateLenThreeFish, то есть 25
+                // Получается, что всего после конца цикла было приращений на 128*25=3200
+                // То есть переполнения нет, cur точно смотрит на нулевой байт после массива
+
                 if (j >= len)
                     j = 0;
 
+                // j:[0, len - 1]
+
+                // j * 128 - это как раз умножение на размер блока
                 add = j << 7; // blockLen * j;
+
+                // add всегда в диапазоне [0, 128*(len - 1)]
+                // Таким образом, максимум будет 128*24=3072
+                // Это должен быть указатель на последний блок. 3072+128=3200. Верно
+
                 key = beginCryptoState + add;
 
                 Threefish_Static_Generated.Threefish1024_step(key: (ulong *) key, tweak: (ulong *) tweakTmp, text: (ulong *) cur);
@@ -394,14 +419,14 @@ namespace cryptoprime.VinKekFish
         public static unsafe void DoKeccakForAllBlocks(byte* CryptoState, int len, ulong * b, ulong * c)
         {
             byte* cur = CryptoState;
-
+            // 16 * 200 = 3200
             for (int i = 0; i < len; i++, cur += KeccakBlockLen)
             {
                 keccak.Keccackf(a: (ulong *) cur, c: c, b: b);
             }
         }
 
-        /// <summary>Осуществляет перестановки байтов для обеспечения диффузии</summary>
+        /// <summary>Осуществляет перестановки байтов в массиве (для обеспечения диффузии)</summary>
         /// <param name="source">Исходный массив: из него берутся значения</param>
         /// <param name="target">Целевой массив: в него записываются значения</param>
         /// <param name="len">Длины обоих массивов в байтах</param>
@@ -416,16 +441,21 @@ namespace cryptoprime.VinKekFish
              * 
              * */
 
+
+             // Таблица перестановок длиной CryptoStateLen*ushort байтов или CryptoStateLen элементов.
+             // Len передаётся как раз CryptoStateLen
+             // То есть переставляется CryptoStateLen байтов с использование CryptoStateLen элементов таблицы перестановок
+             // Вроде бы, всё верно
              for (int i = 0; i < len; i++)
              {
-                target[i] = source[permutationTable[i]];
+                target[i] = source[permutationTable[i]];    // permutationTable должны содержать верные значения
              }
         }
 
         public static ushort* transpose128_3200    = null;
         public static ushort* transpose200_3200    = null;
         public static ushort* transpose200_3200_8  = null;
-        public static ushort* transpose400_3200_16 = null;
+        // public static ushort* transpose400_3200_16 = null;
 
         public static readonly object sync = new object();
 
@@ -440,7 +470,7 @@ namespace cryptoprime.VinKekFish
                 transpose128_3200    = GenTransposeTable(3200, 128);
                 transpose200_3200    = GenTransposeTable(3200, 200);
                 transpose200_3200_8  = GenTransposeTable(3200, 200,  stepInEndOfBlocks: 8);
-                transpose400_3200_16 = GenTransposeTable(3200, 400,  stepInEndOfBlocks: 16);
+                // transpose400_3200_16 = GenTransposeTable(3200, 400,  stepInEndOfBlocks: 16);
             }
 
             if (transpose128_3200[1] != 128)
@@ -487,6 +517,8 @@ namespace cryptoprime.VinKekFish
                     }
                 }
 
+                // Это просто копирование buffer в newTable
+                // Так как оно происходит побайтово, то buffer.Length домножается на 2, т.к. элемент buffer типа ushort
                 fixed (ushort* nt = newTable, buff = buffer)
                 {
                     BytesBuilder.CopyTo(buffer.Length << 1, buffer.Length << 1, (byte*)buff, (byte*)nt);
@@ -527,11 +559,13 @@ namespace cryptoprime.VinKekFish
             buffer2 = null;
             */
 
+            // Вычисление размера newTable в байтах
             long rLen   = newTable.Length * sizeof(ushort);
             var result = (ushort *) Marshal.AllocHGlobal((int) rLen).ToPointer();
 
+            // Выделили место и копируем
             fixed (ushort * newTablePointer = newTable)
-            {
+            {// Вроде бы без переполнений
                 byte * b = (byte *) newTablePointer;
                 BytesBuilder.CopyTo(rLen, rLen, b, (byte *) result);
             }
