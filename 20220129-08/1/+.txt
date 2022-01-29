@@ -1,0 +1,58 @@
+
+
+
+/VinKekFish/vinkekfish/VinKekFish/VinKekFish-20210525/VinKekFishBase_KN_20210525_threads.cs
+
+check_lGne4jGwiock: Проверка на завершаемость потоков при установке флага завершения
+
+
++++
+ОШИБКА: Отсутствует разъясняющий комментарий
+public bool IsEnded
+
++++ (исправлено)
+// check_lGne4jGwiock: ОШИБКА
+// Monitor.Wait(sync) может обеспечить зависание потока.
+// При установке isEnded нужно обеспечить автоматический вызов Monitor.PulseAll(sync);
+
++++
+ОШИБКА: отсутствует описание того, как работает функция ThreadsFunction
+
++++
+ОШИБКА: нет контроля за неверной установкой параметра IsEnded в false
+
+xxx
+ОШИБКА: это (ThreadsInFunc) может быть выполнено уже после того, как другие потоки войдут в ThreadsInFunc--
+ThreadsInFunc должна быть установлена в doFunction
+
+	ЭТО НЕ ОШИБКА!!!
+
++++
+ОШИБКА: ThreadsFunc_Current = ThreadFunc должен идти перед приращением ThreadsTask_CountOfTasks++
+	Вообще говоря, это не ошибка, т.к. всё происходит в sync
+
+xxx
+ПРАВКА:
+doKeccak и другие функции: убрано waitForDoFunction
+// Ждать такие вещи не очень эффективно, хоть и более безопасно. Но здесь мы должны быть эффективны, а не безопасны
+// waitForDoFunction();                // Ждём конца выполнения предыдущей задачи
+	ПРАВКА ОТМЕНЕНА: ожидание происходит только в одном потоке. Ничего страшного не случится.
+	Нет, всё-таки я не буду это убирать
+
++++
+ОШИБКА:
+В конструкторе нет
+this.ThreadsExecutedForTask = ThreadCount;
+Поэтому, ThreadsExecutedForTask никогда не будет верным с начала
+
++++
+ОШИБКА:
+В VinKekFishBase_KN_20210525.cs 
+BytesBuilder.ToNull(targetLength: Len, State2);
+Реально должно очищаться не State2, а st2, т.к. основное состояние переключается между State1 и State2
+
++++
+ОШИБКА: кажется, мы неверно берём CryptoTweakLen * index, ведь у нас их 4 на каждый блок
+	var tweaks  = (ulong *) (((byte *) Tweaks) + CryptoTweakLen * index + CryptoTweakLen*2);
+	Ещё и не вычисляем tweak3, который нужен для нашей реализации
+
