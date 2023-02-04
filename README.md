@@ -1,5 +1,5 @@
 # VinKekFish_CodeReview
-Аuxiliary repository, nothing interesting. Checking code sections for correctness
+Аuxiliary repository, nothing interesting. Checking code sections for correctness (main repository https://github.com/VinKekFish/VinKekFish )
 
 Это вспомогательный репозиторий для https://github.com/VinKekFish/VinKekFish
 Здесь нет ничего интересного.
